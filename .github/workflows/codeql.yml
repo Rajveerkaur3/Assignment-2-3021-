@@ -21,8 +21,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['python']  # You can extend this list if you have other languages
-
+        language: ['python']
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,22 +32,12 @@ jobs:
         run: |
           echo "Listing all files:"
           ls -R
-          echo "Checking for Python files specifically:"
-          find . -name "*.py"
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
-          # Optional: Specify the paths to your Python files if they are inside subdirectories
-          paths: "**/*.py"  # Look for all Python files in the repo
-
-      - if: matrix.build-mode == 'manual'
-        shell: bash
-        run: |
-          echo 'Replace with the commands to build your code, e.g., make bootstrap'
-          exit 1
+          paths: "**/*.py"  # Ensure this matches the location of your Python files
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
