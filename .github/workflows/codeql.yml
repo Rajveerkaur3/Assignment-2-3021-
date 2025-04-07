@@ -10,7 +10,7 @@ on:
 
 jobs:
   analyze:
-    name: Analyze (${{ python.language }})
+    name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -21,22 +21,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['python']
+        language: ['python']  # You can extend this list if you have other languages
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set up Python environment (if necessary)
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'  # or specify your preferred version
+      - name: List all files in the repository (Debugging step)
+        run: |
+          ls -R  # List files recursively to confirm Python files are present
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ python.language }}
+          languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
+          # Optional: Specify the paths to your Python files if they are inside subdirectories
+          paths: "src/**/*.py"  # Update this to the correct path if your Python code is in a subdirectory
 
       - if: matrix.build-mode == 'manual'
         shell: bash
@@ -47,4 +48,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{ python.language }}"
+          category: "/language:${{ matrix.language }}"
