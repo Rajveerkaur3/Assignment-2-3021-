@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ['python']  # You can extend this list if you have other languages
+        language: ['python'] 
 
     steps:
       - name: Checkout repository
@@ -34,7 +34,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.language }}
+          languages: ${{ python.language }}
           build-mode: ${{ matrix.build-mode }}
           # Optional: Specify the paths to your Python files if they are inside subdirectories
           paths: "src/**/*.py"  # Update this to the correct path if your Python code is in a subdirectory
@@ -48,4 +48,4 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{ matrix.language }}"
+          category: "/language:${{ python.language }}"
